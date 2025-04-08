@@ -1,0 +1,114 @@
+FLAWS_Challenge_1-3
+
+http://flaws.cloud/
+
+
+
+명령어를 익혀두고 가면 정신건강에 이롭다.
+https://docs.aws.amazon.com/ko_kr/cli/latest/userguide/cli-services-s3-commands.html
+
+LV1.
+
+![image.png](attachment:edf18bc2-ca70-4439-b340-299061fd7a42:image.png)
+
+3번 힌트는 답이 나오니 주의…!
+
+![image.png](attachment:b8219fd6-9f02-48be-b122-530d49111a21:image.png)
+
+```python
+**설치**: sudo apt install awscli로 도구 준비.
+**접속**: aws s3 ls s3://flaws.cloud --no-sign-request로 버킷 열기.
+**파일 가져오기**: aws s3 cp s3://flaws.cloud/secret-dd02c7c.html ./ --no-sign-request로 다운로드.
+**확인**: cat secret-dd02c7c.html로 링크 찾기.
+**논리**: "잠기지 않은 클라우드 폴더를 열고, 비밀 파일을 꺼내 다음 단계를 알아냄."
+
+- **설치**: sudo apt install awscli로 도구 준비.
+- **접속**: aws s3 ls s3://flaws.cloud --no-sign-request로 버킷 열기.
+- **파일 가져오기**: aws s3 cp s3://flaws.cloud/secret-dd02c7c.html ./ --no-sign-request로 다운로드.
+- **확인**: cat secret-dd02c7c.html로 링크 찾기.
+- **논리**: "잠기지 않은 클라우드 폴더를 열고, 비밀 파일을 꺼내 다음 단계를 알아냄."
+```
+
+**S3가 뭔가요?**: AWS에서 파일을 저장하는 서비스예요. "Simple Storage Service"의 약자고, "버킷(bucket)"이라는 폴더 같은 공간에 데이터를 넣어요.**디폴트 버킷 이름?**: 사실 S3에는 "기본 디폴트 버킷 이름"이라는 개념은 없어요. 버킷 이름은 사용자가 직접 정하는 거예요. 하지만 flaws.cloud 문제에서는:
+
+• 힌트에서 "buckets"와 "sub-domain"을 찾으라고 했고, 주어진 도메인이 flaws.cloud였기 때문에, 논리적으로 버킷 이름이 flaws.cloud일 거라고 추측한 거예요.
+• 즉, **AWS가 정해준 이름이 아니라, 문제를 만든 사람이 flaws.cloud를 버킷 이름으로 설정해놓고 공개로 열어둔 것**이에요.**왜 이렇게 작업했나요?**: Level 1은 "공개된 S3 버킷을 찾는 연습"이에요. flaws.cloud라는 이름을 S3 버킷으로 시도해보니 맞았고, 그 안에서 비밀 파일을 찾은 거죠.**논리 요약**: "도메인 이름 → S3 버킷 이름 추측 → 접근 성공"이라는 흐름이에요. AWS 자체가 디폴트로 뭘 주는 게 아니라, 우리가 문제를 풀면서 추리한 결과예요.
+
+- **S3가 뭔가요?**: AWS에서 파일을 저장하는 서비스예요. "Simple Storage Service"의 약자고, "버킷(bucket)"이라는 폴더 같은 공간에 데이터를 넣어요.
+- **디폴트 버킷 이름?**: 사실 S3에는 "기본 디폴트 버킷 이름"이라는 개념은 없어요. 버킷 이름은 사용자가 직접 정하는 거예요. 하지만 flaws.cloud 문제에서는:
+    - • 힌트에서 "buckets"와 "sub-domain"을 찾으라고 했고, 주어진 도메인이 flaws.cloud였기 때문에, 논리적으로 버킷 이름이 flaws.cloud일 거라고 추측한 거예요.
+    - • 즉, **AWS가 정해준 이름이 아니라, 문제를 만든 사람이 flaws.cloud를 버킷 이름으로 설정해놓고 공개로 열어둔 것**이에요.
+
+- **왜 이렇게 작업했나요?**: Level 1은 "공개된 S3 버킷을 찾는 연습"이에요. flaws.cloud라는 이름을 S3 버킷으로 시도해보니 맞았고, 그 안에서 비밀 파일을 찾은 거죠.
+- **논리 요약**: "도메인 이름 → S3 버킷 이름 추측 → 접근 성공"이라는 흐름이에요. AWS 자체가 디폴트로 뭘 주는 게 아니라, 우리가 문제를 풀면서 추리한 결과예요.
+
+LV2. 
+
+![image.png](attachment:d2abb466-d503-4f56-a92d-3a1cfa255509:image.png)
+
+![image.png](attachment:7412e02a-b527-4490-b6d3-e523f5410076:image.png)
+
+![image.png](attachment:b123261e-b3bf-48af-9fdd-a725fe9a0e76:image.png)
+
+로그인된 ID가 있어야 들어가 확인 할 수 있다.
+
+aws s3 cp s3://level2-c8b217a33fcf1f839f6f1f73a00a9ae7.flaws.cloud/secret-e4443fc.html ./ --no-sign-request
+
+![image.png](attachment:d56b076c-31ed-484d-ab0b-99de934f4303:image.png)
+
+![image.png](attachment:eca7dae0-3de8-4f80-be52-57f344a0d842:image.png)
+
+![image.png](attachment:c0fa1479-5c1c-4323-aeed-aea666ac797c:image.png)
+
+LV3
+
+![image.png](attachment:e685ecc5-09f0-4e62-a151-47650631583d:image.png)
+
+잘못된 IAM 정책을 배우는 단계
+
+```bash
+aws s3 ls s3://level3-9afd3927f195e10225021a578e6f78df.flaws.cloud --no-sign-request
+```
+
+![image.png](attachment:0cb99d92-6d75-4a5e-a6a9-c0f72ce3f31a:image.png)
+
+이전과 다르게 secret 정보가 보이지 않는 대신, .git 폴더가 보인다.
+
+이전에는 없던 사항이니 분석해볼 필요가 있다 판단.
+
+level3 이라는 폴더에 만들어 놓도록 하자.
+
+```bash
+aws s3 cp s3://level3-9afd3927f195e10225021a578e6f78df.flaws.cloud/.git/ ./level3-git --no-sign-request
+```
+
+![image.png](attachment:a92bf05c-aa00-4679-b102-719e00a7c835:image.png)
+
+로그를 확인 할 수 있는데 의심적인 정황들이 보인다.
+
+넣지 말아야하는걸 넣어버렸어…!
+
+![image.png](attachment:d1cf1aaf-d4e9-4e9c-b2f5-d292c7922b68:image.png)
+
+아래에 확인해보니 해당 관리자의 액세스 키, 시크릿키를 확인 할 수 있었음.
+
+```bash
++access_key ##########7SA
++secret_access_key #########Jys
+```
+
+로그인 정보를 탈취했으니 당장 써먹어보자.
+
+![image.png](attachment:75450503-85a6-4968-91e4-324711143168:image.png)
+
+![image.png](attachment:e1aa04bc-bd3a-4bac-beb7-a4f03577b1c5:image.png)
+
+권한을 바꾸고 들어가보니 문제가 the end를 포함 7개 인것을 확인할 수 있다.
+
+하지만 유의미한 결과를 찾기에는 무리…
+
+힌트4번을 열어보니 답이였음
+
+![image.png](attachment:34378134-87f1-4494-8db2-554432ec4431:image.png)
+
+.git과 같은 폴더가 확인되면 하나하나 다운받으면서 확인하지말고 일괄 다운로드 이후 한번에 확인해보도록 하자.
